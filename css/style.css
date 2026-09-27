@@ -1,0 +1,293 @@
+/* ==========================================================================
+   MELLORA ARTISAN RAW HONEY - CORE DESIGN SYSTEM & STYLES
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,600&display=swap');
+
+:root {
+  /* Brand Honey Colors */
+  --honey-50: #fffbeb;
+  --honey-100: #fef3c7;
+  --honey-200: #fde68a;
+  --honey-300: #fcd34d;
+  --honey-400: #fbbf24;
+  --honey-500: #f59e0b;
+  --honey-600: #d97706;
+  --honey-700: #b45309;
+  --honey-800: #92400e;
+  --honey-900: #78350f;
+  --honey-amber: #e67e22;
+  --honey-gold: #f39c12;
+  --honey-glow: rgba(245, 158, 11, 0.35);
+  --honey-glow-intense: rgba(245, 158, 11, 0.65);
+
+  /* Obsidian & Luxury Dark Backgrounds */
+  --bg-dark: #0a0806;
+  --bg-surface: #120e0a;
+  --bg-card: rgba(26, 20, 14, 0.85);
+  --bg-card-hover: rgba(38, 28, 18, 0.95);
+  --border-gold: rgba(245, 158, 11, 0.2);
+  --border-gold-hover: rgba(245, 158, 11, 0.5);
+
+  /* Typography Colors */
+  --text-main: #fdfaf5;
+  --text-muted: #d1c2b0;
+  --text-dim: #9e8d7a;
+  --text-gold: #fbbf24;
+
+  /* Fonts */
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-display: 'Cinzel', serif;
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(18, 14, 10, 0.75);
+  --glass-border: 1px solid rgba(245, 158, 11, 0.22);
+  --glass-blur: blur(14px);
+
+  /* Spacing & Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+  --container-max: 1280px;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  color-scheme: dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(217, 119, 6, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 65%, rgba(180, 83, 9, 0.1) 0%, transparent 45%),
+    radial-gradient(circle at 50% 90%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--honey-600), var(--honey-400));
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-dark);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--honey-300);
+}
+
+/* Selection */
+::selection {
+  background: var(--honey-500);
+  color: #000;
+}
+
+/* Background Honeycomb Tessellation Overlay */
+.honeycomb-pattern {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='97' viewBox='0 0 56 97'%3E%3Cpath fill='none' stroke='%23f59e0b' stroke-width='1' stroke-opacity='0.4' d='M28 0l28 16.2v32.4L28 64.8 0 48.6V16.2zm0 97.2l28-16.2V48.6L28 64.8 0 48.6v32.4z'/%3E%3C/svg%3E");
+  background-size: 56px 97px;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Typography Utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef08a 25%, #f59e0b 60%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.gold-subtle-text {
+  color: var(--honey-400);
+}
+
+/* Section Header */
+.section-header {
+  text-align: center;
+  max-width: 750px;
+  margin: 0 auto 3.5rem;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  border-radius: var(--radius-full);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--border-gold);
+  color: var(--honey-300);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.85rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  color: #1a0f02;
+  box-shadow: 0 4px 20px var(--honey-glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--honey-glow-intense);
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border: 1px solid var(--border-gold);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--honey-400);
+  color: var(--honey-200);
+  transform: translateY(-2px);
+}
+
+.btn-sm {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.85rem;
+}
+
+/* Glass Card */
+.glass-card {
+  background: var(--bg-card);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: var(--glass-blur);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.glass-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-gold-hover);
+  box-shadow: 0 16px 48px rgba(245, 158, 11, 0.15), 0 0 20px rgba(245, 158, 11, 0.08);
+}
+
+/* Canvas Layers */
+#bee-canvas, #pollen-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 900;
+}
+
+/* Sticky Scroll Honey Trail (Golden Edge Indicator) */
+.honey-scroll-stream {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 0%;
+  background: linear-gradient(180deg, #fcd34d, #f59e0b, #b45309);
+  box-shadow: 0 0 14px #fbbf24, 0 0 24px rgba(245, 158, 11, 0.5);
+  z-index: 1000;
+  transition: height 0.05s ease-out;
+  border-radius: 0 0 8px 8px;
+}
+
+.honey-scroll-stream::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: -3px;
+  width: 11px;
+  height: 11px;
+  background: #fde68a;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #fbbf24;
+}

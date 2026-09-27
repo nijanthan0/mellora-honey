@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MELLORA | Pure Artisan Raw Honey · Liquid Gold Experience</title>
+  <meta name="description" content="Experience 100% raw, unheated, single-origin artisan honey with interactive flowing honey physics and roaming bees. Pure nectar from wild bio-reserves." />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/components.css" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍯</text></svg>">
+</head>
+<body>
+
+  <!-- Background Canvas & Overlay Layers -->
+  <div class="honeycomb-pattern"></div>
+  <canvas id="bee-canvas"></canvas>
+  <canvas id="pollen-canvas"></canvas>
+  <div id="honey-scroll-stream" class="honey-scroll-stream"></div>
+
+  <!-- =======================================================================
+       SITE HEADER & NAVIGATION
+       ======================================================================= -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <!-- Brand Logo -->
+      <a href="#hero" class="brand-logo">
+        <svg class="brand-logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="20,2 36,11 36,29 20,38 4,29 4,11" stroke="#fbbf24" stroke-width="2" fill="rgba(245, 158, 11, 0.25)" />
+          <!-- Mini bee silhouette -->
+          <ellipse cx="20" cy="20" rx="4" ry="7" fill="#fbbf24" transform="rotate(-30 20 20)" />
+          <ellipse cx="17" cy="16" rx="5" ry="2" fill="rgba(255,255,255,0.8)" transform="rotate(-60 17 16)" />
+          <ellipse cx="23" cy="18" rx="5" ry="2" fill="rgba(255,255,255,0.8)" transform="rotate(30 23 18)" />
+        </svg>
+        <span>MELLORA<span class="gold-subtle-text">.</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="#collection" class="nav-link">The Harvest</a></li>
+        <li><a href="#purity" class="nav-link">Purity Promise</a></li>
+        <li><a href="#honey-lab" class="nav-link">Honey Lab</a></li>
+        <li><a href="#apiary" class="nav-link">Our Apiary</a></li>
+        <li><a href="#reviews" class="nav-link">Reviews</a></li>
+      </ul>
+
+      <!-- Action Toggles -->
+      <div class="nav-actions">
+        <!-- Bee Count Controller -->
+        <button id="bee-count-btn" class="header-tool-btn" title="Click to adjust roaming bees">
+          <span>🐝</span>
+          <span id="bee-count-display">Bees: 5</span>
+        </button>
+
+        <!-- Sound FX & Ambiance Toggle -->
+        <button id="audio-toggle-btn" class="header-tool-btn" title="Toggle nature sound ambiance & drip FX">
+          <span>🔊</span>
+          <span id="audio-status-text">Sound: Muted</span>
+        </button>
+
+        <!-- Cart Button -->
+        <button class="cart-btn open-cart-trigger" aria-label="Open Honey Basket">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span id="cart-badge-count" class="cart-count">1</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================================================================
+       1. HERO SECTION: INTERACTIVE HONEY SPOON & DRIPPING PHYSICS
+       ======================================================================= -->
+  <section id="hero" class="hero-section">
+    <div class="container hero-grid">
+      <!-- Left Content -->
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="hero-badge-sparkle">✨</span>
+          <span>100% Pure Raw Wild Harvest · Single Origin</span>
+        </div>
+
+        <h1 class="hero-title">
+          Pure Nature.<br />
+          <span class="gold-gradient-text">Liquid Gold.</span>
+        </h1>
+
+        <p class="hero-desc">
+          Cold-extracted, unheated raw honey nurtured by wild mountain bees. Experience nature's most bioactive, golden elixir with alive enzymes, delicate floral nectar, and centuries of artisan beekeeping tradition.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#collection" class="btn btn-primary">
+            <span>Explore The Harvest</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <button id="btn-play-game-cta" class="btn btn-secondary" onclick="document.getElementById('game-start-btn').click(); document.getElementById('honey-game-canvas').scrollIntoView({behavior: 'smooth', block: 'center'});">
+            <span>🎮 Play Nectar Harvest (Win 15%)</span>
+          </button>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat-item">
+            <span class="hero-stat-number">100%</span>
+            <span class="hero-stat-label">Raw & Unheated</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-number">&lt; 38°C</span>
+            <span class="hero-stat-label">Alive Enzymes</span>
+          </div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-number">4.98 ★</span>
+            <span class="hero-stat-label">2,400+ Honey Lovers</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Interactive Game Stage -->
+      <div class="hero-stage">
+        <div class="stage-glow-backdrop"></div>
+
+        <div class="game-cabinet">
+          <!-- Game HUD -->
+          <div class="game-hud">
+            <div class="game-hud-stat">
+              <span>🍯 Score:</span>
+              <span id="game-score-val" style="color: #fde047;">0</span>
+            </div>
+
+            <div class="game-progress-wrap">
+              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--honey-300); margin-bottom: 2px;">
+                <span>Fill Jar:</span>
+                <span id="game-fill-pct">0%</span>
+              </div>
+              <div class="game-progress-bar-track">
+                <div id="game-fill-bar" class="game-progress-bar-fill"></div>
+              </div>
+            </div>
+
+            <div class="game-hud-stat">
+              <span id="game-lives-val">🐝 🐝 🐝</span>
+            </div>
+          </div>
+
+          <!-- Real-time Game Canvas -->
+          <canvas id="honey-game-canvas"></canvas>
+
+          <!-- 1. Start Screen Overlay -->
+          <div id="game-start-overlay" class="game-overlay">
+            <div class="game-overlay-icon">🍯</div>
+            <h3 class="game-overlay-title">The Nectar Harvest</h3>
+            <p class="game-overlay-desc">
+              Move your jar left and right to catch falling golden honey drops & wild floral nectar. Avoid raindrops! Fill your jar to 100% to unlock <strong>15% OFF</strong>.
+            </p>
+            <button id="game-start-btn" class="btn btn-primary" style="padding: 0.75rem 1.6rem;">
+              <span>🐝 Start Harvesting</span>
+            </button>
+          </div>
+
+          <!-- 2. Victory Screen Overlay -->
+          <div id="game-victory-overlay" class="game-overlay" style="display: none;">
+            <div class="game-overlay-icon">🏆</div>
+            <h3 class="game-overlay-title" style="color: #fde047;">Pure Liquid Gold!</h3>
+            <p class="game-overlay-desc" style="margin-bottom: 1rem;">
+              Your artisan jar is 100% full with nature's sweetest reserve. You've earned an exclusive reward:
+            </p>
+            <div class="game-reward-badge">
+              <div style="font-size: 0.8rem; color: var(--honey-300); text-transform: uppercase; font-weight: 600;">15% Off Secret Promo Code</div>
+              <div class="game-code-highlight">QUEENBEE15</div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+              <button id="game-apply-promo-btn" class="btn btn-primary btn-sm">
+                <span>🍯 Apply & Shop Collection</span>
+              </button>
+              <button id="game-play-again-btn" class="btn btn-secondary btn-sm">
+                <span>🔄 Play Again</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3. Game Over Screen Overlay -->
+          <div id="game-over-overlay" class="game-overlay" style="display: none;">
+            <div class="game-overlay-icon">🌧️</div>
+            <h3 class="game-overlay-title" style="color: #f87171;">Rain Diluted the Honey!</h3>
+            <p class="game-overlay-desc">
+              Too many raindrops entered the jar. Pure raw honey must stay completely moisture-free!
+            </p>
+            <button id="game-retry-btn" class="btn btn-primary" style="padding: 0.75rem 1.6rem;">
+              <span>🔄 Try Again</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       2. PRODUCT SHOWCASE: ARTISAN HONEY COLLECTION
+       ======================================================================= -->
+  <section id="collection" class="products-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">The Reserve Harvest</div>
+        <h2 class="section-title">Nectar of the Wild Blooms</h2>
+        <p class="section-subtitle">
+          Each jar captures the botanical fingerprint of a single season and untouched ecosystem. Gently harvested without heat, filtering, or additives.
+        </p>
+      </div>
+
+      <div class="products-grid">
+        <!-- Product 1: Wild Mountain Blossom -->
+        <div class="product-card" data-id="wildflower">
+          <div class="product-image-container">
+            <img class="product-image" src="assets/images/jar-wildflower.jpg" alt="Mellora Wildflower Raw Honey" loading="lazy" />
+            <span class="product-badge-origin">Alpine Foothills</span>
+          </div>
+          <div class="product-meta-header">
+            <h3 class="product-title">Wildflower Raw Reserve</h3>
+            <span class="product-price">$28.00</span>
+          </div>
+          <p class="product-weight">340g / 12.0 oz · Raw Comb Extraction</p>
+          <p class="product-desc">
+            A harmonious bouquet of wild lavender, mountain thyme, and clover. Bright golden hue with a warm lingering floral finish.
+          </p>
+          <div class="product-attributes">
+            <div class="attr-row">
+              <span class="attr-name">Sweetness</span>
+              <div class="attr-meter">
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Viscosity</span>
+              <span class="attr-value">Medium Velvet</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Harvest</span>
+              <span class="attr-value">Early Midsummer</span>
+            </div>
+          </div>
+          <div class="tasting-tags">
+            <span class="tag-pill">Lavender</span>
+            <span class="tag-pill">Citrus Blossom</span>
+            <span class="tag-pill">Thyme</span>
+          </div>
+          <button class="btn-add-cart">
+            <span>Add to Honeycomb Basket</span>
+            <span>+</span>
+          </button>
+        </div>
+
+        <!-- Product 2: Acacia Honey -->
+        <div class="product-card" data-id="acacia">
+          <div class="product-image-container">
+            <img class="product-image" src="assets/images/jar-acacia.jpg" alt="Mellora Pure Acacia Honey" loading="lazy" />
+            <span class="product-badge-origin">Ancient Woodlands</span>
+          </div>
+          <div class="product-meta-header">
+            <h3 class="product-title">Pure Acacia Nectar</h3>
+            <span class="product-price">$32.00</span>
+          </div>
+          <p class="product-weight">350g / 12.3 oz · High Fructose / Slow Crystallization</p>
+          <p class="product-desc">
+            Luminous, water-clear golden honey harvested during the brief 10-day black locust bloom. Mild, elegant, with vanilla undertones.
+          </p>
+          <div class="product-attributes">
+            <div class="attr-row">
+              <span class="attr-name">Sweetness</span>
+              <div class="attr-meter">
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip"></span>
+                <span class="meter-pip"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Viscosity</span>
+              <span class="attr-value">Silky & Light</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Harvest</span>
+              <span class="attr-value">Late Spring</span>
+            </div>
+          </div>
+          <div class="tasting-tags">
+            <span class="tag-pill">Vanilla</span>
+            <span class="tag-pill">White Flower</span>
+            <span class="tag-pill">Silky</span>
+          </div>
+          <button class="btn-add-cart">
+            <span>Add to Honeycomb Basket</span>
+            <span>+</span>
+          </button>
+        </div>
+
+        <!-- Product 3: Dark Forest Honey -->
+        <div class="product-card" data-id="forest">
+          <div class="product-image-container">
+            <img class="product-image" src="assets/images/jar-forest.jpg" alt="Mellora Dark Forest Honey with Comb" loading="lazy" />
+            <span class="product-badge-origin">Black Forest Biosphere</span>
+          </div>
+          <div class="product-meta-header">
+            <h3 class="product-title">Dark Forest & Comb</h3>
+            <span class="product-price">$36.00</span>
+          </div>
+          <p class="product-weight">500g / 17.6 oz · With Intact Honeycomb Chunk</p>
+          <p class="product-desc">
+            Deep amber honeydew nectar produced from ancient fir and oak forests. Rich mineral notes of malt, molasses, and raw beeswax chew.
+          </p>
+          <div class="product-attributes">
+            <div class="attr-row">
+              <span class="attr-name">Sweetness</span>
+              <div class="attr-meter">
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip"></span>
+                <span class="meter-pip"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Viscosity</span>
+              <span class="attr-value">Dense & Heavy</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Harvest</span>
+              <span class="attr-value">Late Autumn</span>
+            </div>
+          </div>
+          <div class="tasting-tags">
+            <span class="tag-pill">Malt</span>
+            <span class="tag-pill">Smoked Wood</span>
+            <span class="tag-pill">Raw Comb</span>
+          </div>
+          <button class="btn-add-cart">
+            <span>Add to Honeycomb Basket</span>
+            <span>+</span>
+          </button>
+        </div>
+
+        <!-- Product 4: Royal Nectar -->
+        <div class="product-card" data-id="royal">
+          <div class="product-image-container">
+            <img class="product-image" src="assets/images/jar-royal.jpg" alt="Mellora Royal Nectar with 24k Gold" loading="lazy" />
+            <span class="product-badge-origin">Queen Apiary Reserve</span>
+          </div>
+          <div class="product-meta-header">
+            <h3 class="product-title">Royal Nectar 24K</h3>
+            <span class="product-price">$58.00</span>
+          </div>
+          <p class="product-weight">250g / 8.8 oz · Infused with Propolis & 24K Gold</p>
+          <p class="product-desc">
+            The pinnacle of apiary luxury. Raw enzyme-dense honey blended with fresh queen royal jelly, active bee propolis, and edible 24k gold leaf.
+          </p>
+          <div class="product-attributes">
+            <div class="attr-row">
+              <span class="attr-name">Sweetness</span>
+              <div class="attr-meter">
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip filled"></span>
+                <span class="meter-pip"></span>
+              </div>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Viscosity</span>
+              <span class="attr-value">Rich Elixir</span>
+            </div>
+            <div class="attr-row">
+              <span class="attr-name">Bioactivity</span>
+              <span class="attr-value">TA 25+ Active</span>
+            </div>
+          </div>
+          <div class="tasting-tags">
+            <span class="tag-pill">Royal Jelly</span>
+            <span class="tag-pill">24K Gold</span>
+            <span class="tag-pill">Propolis</span>
+          </div>
+          <button class="btn-add-cart">
+            <span>Add to Honeycomb Basket</span>
+            <span>+</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       3. HONEYCOMB PURITY GUARANTEE SECTION
+       ======================================================================= -->
+  <section id="purity" class="purity-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">The Mellora Standard</div>
+        <h2 class="section-title">The Purity of Raw Honey</h2>
+        <p class="section-subtitle">
+          Unlike industrial honey that is heated, ultra-filtered, and stripped of vitality, our honey arrives at your table exactly as the bees prepared it.
+        </p>
+      </div>
+
+      <div class="hex-features-grid">
+        <div class="hex-feature-card">
+          <div class="hex-icon-box">🌡️</div>
+          <h3 class="hex-feature-title">Never Heated Above 38°C</h3>
+          <p class="hex-feature-desc">
+            Industrial processing boils honey, destroying precious invertase enzymes and pinocembrin antioxidants. We cold-spin exclusively at hive temperature.
+          </p>
+        </div>
+
+        <div class="hex-feature-card">
+          <div class="hex-icon-box">🌸</div>
+          <h3 class="hex-feature-title">Intact Flower Pollen</h3>
+          <p class="hex-feature-desc">
+            Every spoonful contains hundreds of micro-pollen grains that provide rich trace vitamins, amino acids, and distinct regional aroma bouquets.
+          </p>
+        </div>
+
+        <div class="hex-feature-card">
+          <div class="hex-icon-box">🐝</div>
+          <h3 class="hex-feature-title">Bee-First Stewardship</h3>
+          <p class="hex-feature-desc">
+            We never feed our bees artificial corn syrup or sugar water. We harvest only genuine seasonal surplus, ensuring our colonies thrive year-round.
+          </p>
+        </div>
+
+        <div class="hex-feature-card">
+          <div class="hex-icon-box">🔬</div>
+          <h3 class="hex-feature-title">Nuclear Magnetic Certified</h3>
+          <p class="hex-feature-desc">
+            Each batch undergoes independent NMR spectroscopy to guarantee 100% botanical authenticity and 0% sugar-syrup adulteration.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       4. INTERACTIVE HONEY LAB & VISCOSITY EXPERIMENTER
+       ======================================================================= -->
+  <section id="honey-lab" class="lab-section">
+    <div class="container">
+      <div class="lab-card">
+        <div class="lab-grid">
+          <div>
+            <div class="section-badge">Interactive Tasting Lab</div>
+            <h2 class="section-title" style="font-size: 2.2rem;">Honey Viscosity & Flow Simulator</h2>
+            <p class="section-subtitle" style="text-align: left; margin-bottom: 2rem;">
+              Honey viscosity is determined by moisture content, flower species, and natural fructose-to-glucose ratios. Adjust the harvest slider to watch the liquid stream change in real-time.
+            </p>
+
+            <div class="lab-controls">
+              <div class="slider-group">
+                <div class="slider-label-row">
+                  <span>Harvest Season / Flower Density</span>
+                  <span id="lab-flow-name" style="color: var(--honey-400);">Wild Meadow Blossom (Velvet)</span>
+                </div>
+                <input id="lab-viscosity-slider" class="honey-slider" type="range" min="1" max="4" step="0.05" value="2" />
+              </div>
+
+              <div class="slider-group">
+                <div class="slider-label-row">
+                  <span>Dynamic Shear Viscosity</span>
+                  <span id="lab-viscosity-val">32.4 Pa·s</span>
+                </div>
+              </div>
+
+              <div style="background: rgba(245, 158, 11, 0.08); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-gold); font-size: 0.85rem; color: var(--text-muted);">
+                💡 <strong>Did You Know?</strong> Pure raw honey is a non-Newtonian thixotropic fluid. When stirred, its viscosity temporarily decreases, making it pour like warm silk before returning to its thick natural structure.
+              </div>
+            </div>
+          </div>
+
+          <div class="viscosity-visualizer">
+            <canvas id="lab-canvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       5. OUR APIARY & SUSTAINABILITY SECTION
+       ======================================================================= -->
+  <section id="apiary" class="apiary-section">
+    <div class="container">
+      <div class="apiary-card">
+        <img class="apiary-bg" src="assets/images/apiary-hero.jpg" alt="Mellora Mountain Valley Apiary" loading="lazy" />
+        <div class="apiary-content">
+          <div class="section-badge">Wild Alpine Sanctuary</div>
+          <h2 class="section-title" style="font-size: 2.6rem;">Nurtured in Untouched Mountain Valleys</h2>
+          <p class="hero-desc" style="color: #f3ede2;">
+            Our wooden Langstroth hives sit in protected alpine valleys, far away from commercial highways and monoculture pesticides. Our bees forage freely among over 80 species of wild native flowers and aromatic herbs.
+          </p>
+          <div style="margin-top: 1.5rem;">
+            <a href="#collection" class="btn btn-primary">Taste The Difference</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       6. REVIEWS & CUSTOMER LOVE
+       ======================================================================= -->
+  <section id="reviews" class="reviews-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">Customer Stories</div>
+        <h2 class="section-title">Loved by Gourmet Palates</h2>
+        <p class="section-subtitle">
+          Read what chefs, tea connoisseurs, and natural wellness lovers say about our raw honey.
+        </p>
+      </div>
+
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "The Wildflower Reserve is unlike any honey you can buy in supermarkets. You can literally smell the lavender and mountain breeze the moment you pop open the wooden lid. An absolute masterpiece."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">EA</div>
+            <div>
+              <div class="reviewer-name">Elena Andreou</div>
+              <div class="reviewer-verified">Verified Connoisseur · Zurich</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "The Dark Forest Honey with raw comb is extraordinary. Rich, malty, with almost caramel and smoky cedar undertones. The honey spoon drip and packaging are as luxurious as fine perfume."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">MB</div>
+            <div>
+              <div class="reviewer-name">Marcus Bennett</div>
+              <div class="reviewer-verified">Michelin Star Pastry Chef · London</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">
+            "I ordered the Royal Nectar 24k as an anniversary gift. Not only is it gorgeous on the breakfast table, but a single teaspoon gives you an immediate natural energy lift. Mellora is in a league of its own."
+          </p>
+          <div class="reviewer-info">
+            <div class="reviewer-avatar">SL</div>
+            <div>
+              <div class="reviewer-name">Sophia Laurent</div>
+              <div class="reviewer-verified">Verified Buyer · Paris</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =======================================================================
+       7. SLIDE-OUT CART DRAWER & CHECKOUT
+       ======================================================================= -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay">
+    <div class="cart-drawer">
+      <div class="cart-header">
+        <h3 class="cart-title">Honeycomb Basket</h3>
+        <button id="cart-close-btn" class="cart-close-btn">&times;</button>
+      </div>
+
+      <div class="free-gift-progress-wrap">
+        <div id="free-gift-text" class="free-gift-text">
+          <span>Free Gift</span>
+          <span>Add <strong>$22.00</strong> for a Free Honey Spoon</span>
+        </div>
+        <div class="free-gift-track">
+          <div id="free-gift-fill" class="free-gift-fill"></div>
+        </div>
+      </div>
+
+      <div id="cart-items-container" class="cart-items-list">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+      <div class="cart-footer">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+          <input id="promo-code-input" type="text" placeholder="Promo Code (SWEET10)" style="flex: 1; background: #261b12; border: 1px solid var(--border-gold); border-radius: var(--radius-sm); padding: 0.6rem 0.8rem; color: #fff; font-size: 0.82rem; outline: none;" />
+          <button id="apply-promo-btn" style="background: var(--honey-600); border: none; color: #fff; padding: 0 1rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600; cursor: pointer;">Apply</button>
+        </div>
+        <div id="promo-status-msg" style="font-size: 0.75rem; margin-bottom: 0.6rem; display: none;"></div>
+
+        <div class="cart-subtotal-row">
+          <span>Subtotal</span>
+          <span id="cart-subtotal-val" class="cart-subtotal-val">$28.00</span>
+        </div>
+
+        <button id="cart-checkout-btn" class="btn btn-primary cart-checkout-btn">
+          <span>Proceed to Sweet Checkout</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       8. FOOTER
+       ======================================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="#hero" class="brand-logo" style="margin-bottom: 1rem;">
+            <span>MELLORA<span class="gold-subtle-text">.</span></span>
+          </a>
+          <p class="footer-brand-desc">
+            Honoring the sacred art of wild beekeeping. Pure, unheated raw honey harvested in harmony with nature's seasons.
+          </p>
+          <div style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--honey-300);">
+            🌱 1 Jar Purchased = 10 Wild Flowers Protected
+          </div>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">The Harvest</h4>
+          <ul class="footer-links">
+            <li><a href="#collection" class="footer-link">Wildflower Honey</a></li>
+            <li><a href="#collection" class="footer-link">Acacia Blossom</a></li>
+            <li><a href="#collection" class="footer-link">Dark Forest & Comb</a></li>
+            <li><a href="#collection" class="footer-link">Royal Nectar 24K</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Philosophy</h4>
+          <ul class="footer-links">
+            <li><a href="#purity" class="footer-link">Cold Extraction</a></li>
+            <li><a href="#purity" class="footer-link">Enzyme Bioactivity</a></li>
+            <li><a href="#apiary" class="footer-link">Bee Conservation</a></li>
+            <li><a href="#honey-lab" class="footer-link">Viscosity Testing</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">The Honeycomb Club</h4>
+          <p style="font-size: 0.88rem; color: var(--text-dim); margin-bottom: 1rem;">
+            Subscribe to receive seasonal harvest notices and a secret code for $10 off your first jar.
+          </p>
+          <form class="newsletter-box" onsubmit="event.preventDefault(); alert('🍯 Welcome to the Mellora Honeycomb Club! Check your inbox for your $10 welcome reward.');">
+            <input class="newsletter-input" type="email" placeholder="Your email address" required />
+            <button class="newsletter-btn" type="submit">Join</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Mellora Artisan Raw Honey. All rights reserved. Handcrafted for Little Beez.</div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="#" class="footer-link">Privacy Policy</a>
+          <a href="#" class="footer-link">Terms of Service</a>
+          <a href="#" class="footer-link">Lab Certificates</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/bee-engine.js"></script>
+  <script src="js/honey-physics.js"></script>
+  <script src="js/honey-game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
